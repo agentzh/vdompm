@@ -1,0 +1,28 @@
+---
+abstract: 'Visual DOM client library for Perl'
+author:
+  - 'Agent Zhang <agentzh@yahoo.cn>'
+build_requires:
+  Test::More: 0
+distribution_type: module
+generated_by: 'Module::Install version 0.77'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: VDOM
+no_index:
+  directory:
+    - t
+    - inc
+    - doc
+    - share
+    - demo
+    - inc
+    - t
+requires:
+  Scalar::Util: 0
+  perl: 5.6.1
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.001
