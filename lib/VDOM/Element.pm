@@ -3,8 +3,8 @@ package VDOM::Element;
 use strict;
 use warnings;
 
+use VDOM::Util qw( safe_json_decode );
 use Scalar::Util qw( weaken );
-use JSON::XS ();
 
 use base 'VDOM::Node';
 __PACKAGE__->mk_accessors(qw{
@@ -12,8 +12,6 @@ __PACKAGE__->mk_accessors(qw{
     title alt src
     numericFontSize numericFontWeight
 });
-
-our $JsonXs = JSON::XS->new->utf8->allow_nonref;
 
 our %NumericFontWeight = (
     bolder  => 900,
@@ -83,7 +81,7 @@ sub parse_line {
             #warn "$1 => [$2]";
             my ($key, $json_val) = ($1, $2);
             if ($json_val =~ /^"/) {
-                $self->{$key} = $JsonXs->decode($json_val);
+                $self->{$key} = safe_json_decode($json_val);
             } else {
                 $self->{$key} = $json_val;
             }
