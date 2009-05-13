@@ -227,4 +227,21 @@ sub AUTOLOAD {
 }
 =cut
 
+sub delete {
+    my $self = shift;
+    if ($self && ref $self eq 'HASH') {
+        while (my ($key, $val) = each %$self) {
+            if (ref $val eq 'ARRAY') {
+                for my $n (@$val) {
+                    warn "HERE!";
+                    if (defined $n && ref $n && $n->can('delete')) {
+                        $n->delete;
+                    }
+                }
+            }
+            undef $val;
+        }
+    }
+}
+
 1;

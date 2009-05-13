@@ -46,6 +46,7 @@ sub parse_line {
 =cut
 
     %$self = %$win;
+    #undef $self->{_parentNode};
     $self;
 }
 
@@ -75,7 +76,10 @@ sub parse_file {
     if (!$line) {
         die "No document node specified.\n";
     }
-    my $doc = VDOM::Document->new->parse_line(\$line)->parentNode($self);
+
+    my $doc = VDOM::Document->new->parse_line(\$line);
+    $doc->parentNode($self);
+    warn "exiting...\n"; return;
     $self->document($doc);
 
     my @parent = ($doc, $self);
@@ -127,6 +131,14 @@ sub parse_file {
         }
     }
     $self;
+}
+
+sub DESTROY {
+    my $self = $_[0];
+    #cleanup($self->document->body);
+    #cleanup($self->document);
+    #cleanup($self->{_document});
+    #cleanup($self);
 }
 
 1;

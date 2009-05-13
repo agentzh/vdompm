@@ -29,7 +29,7 @@ sub parse_line {
         die "Syntax error while parsing document node: Line $.: $$rsrc\n";
     }
     while (my ($key, $val) = each %$win) {
-        if (substr($key, 0, 1) ne '_') {
+        if ($key !~ /^_/) {
             $self->{$key} = $val;
         }
     }
