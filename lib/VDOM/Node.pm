@@ -195,6 +195,7 @@ sub parentNode {
     my $self = shift;
     if (@_) {
         my $parent = shift;
+        #warn "HERE~~~...\n";
         Scalar::Util::weaken($self->{_parentNode} = $parent);
         $self;
     } else {
@@ -225,15 +226,13 @@ sub AUTOLOAD {
         return $self->{$meth};
     }
 }
-=cut
 
 sub delete {
     my $self = shift;
-    if ($self && ref $self eq 'HASH') {
+    if ($self && ref $self) {
         while (my ($key, $val) = each %$self) {
             if (ref $val eq 'ARRAY') {
                 for my $n (@$val) {
-                    warn "HERE!";
                     if (defined $n && ref $n && $n->can('delete')) {
                         $n->delete;
                     }
@@ -243,5 +242,6 @@ sub delete {
         }
     }
 }
+=cut
 
 1;

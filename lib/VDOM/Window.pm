@@ -79,8 +79,8 @@ sub parse_file {
 
     my $doc = VDOM::Document->new->parse_line(\$line);
     $doc->parentNode($self);
-    warn "exiting...\n"; return;
     $self->document($doc);
+    #warn "exiting...\n"; return $self;
 
     my @parent = ($doc, $self);
     my @children = ([], $self->{_childNodes});
@@ -139,6 +139,12 @@ sub DESTROY {
     #cleanup($self->document);
     #cleanup($self->{_document});
     #cleanup($self);
+}
+
+sub delete {
+    my $self = shift;
+    $self->document->delete;
+    $self->SUPER::delete;
 }
 
 1;

@@ -28,6 +28,16 @@ sub new {
     if (@_) {
         my $parent = shift;
         if (defined $parent) {
+
+=begin comment
+            while (my ($key, $val) = each %$parent) {
+                if ($key !~ /^_/) {
+                    #warn "KEY: $key\n";
+                    $self->{$key} = $val;
+                }
+            }
+=cut
+
             %$self = %$parent;
             $self->parentNode($parent);
             $self->{_child_ind} = shift;
