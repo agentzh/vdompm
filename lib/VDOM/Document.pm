@@ -10,7 +10,14 @@ __PACKAGE__->mk_accessors(qw{
 
 sub new {
     my $proto = ref $_[0] ? ref shift : shift;
-    $proto->SUPER::new(@_);
+    my $self = bless {
+    }, $proto;
+    if (@_) {
+        Scalar::Util::weaken(
+            $self->{_ownerWindow} = $_[0] )
+    }
+
+    $self;
 }
 
 sub getElementById {
@@ -24,11 +31,11 @@ sub ownerDocument {
 
 sub parse_line {
     my ($self, $rsrc) = @_;
-    my $win = VDOM::Element->new->parse_line($rsrc);
-    if ($win->tagName ne 'document') {
+    my $elem = VDOM::Element->new->parse_line($rsrc);
+    if ($elem->tagName ne 'document') {
         die "Syntax error while parsing document node: Line $.: $$rsrc\n";
     }
-    while (my ($key, $val) = each %$win) {
+    while (my ($key, $val) = each %$elem) {
         if ($key !~ /^_/) {
             $self->{$key} = $val;
         }

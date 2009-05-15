@@ -77,7 +77,7 @@ sub parse_file {
         die "No document node specified.\n";
     }
 
-    my $doc = VDOM::Document->new->parse_line(\$line);
+    my $doc = VDOM::Document->new($self)->parse_line(\$line);
     $doc->parentNode($self);
     $self->document($doc);
     #warn "exiting...\n"; return $self;
@@ -102,7 +102,7 @@ sub parse_file {
             } else {
                 my $child_index = @{ $children[0] };
                 push @{ $children[0] },
-                    VDOM::Text->new($parent[0], $child_index, $doc)
+                    VDOM::Text->new($parent[0], $child_index, $self, $doc)
                         ->parse_line(\$_);
             }
             ### @children
@@ -121,7 +121,7 @@ sub parse_file {
         } else { # must be an element
             ### found an element node...
             my $child_index = @{ $children[0] };
-            my $node = VDOM::Element->new($parent[0], $child_index, $doc)
+            my $node = VDOM::Element->new($parent[0], $child_index, $self, $doc)
                     ->parse_line(\$_);
             push @{ $children[0] }, $node;
             unshift @parent, $node;

@@ -9,7 +9,7 @@ BEGIN {
     binmode \*STDERR, ":utf8";
 }
 
-use Test::More tests => 148;
+use Test::More tests => 151;
 #use Test::More 'no_plan';
 
 #use Devel::Leak::Object qw( GLOBAL_bless );
@@ -165,8 +165,14 @@ is $body->firstChild, $body->lastChild, 'firstChild tagName ok';
 is $body->firstChild->firstChild, undef, 'text node has no firstChild';
 
 is $doc->ownerDocument, undef, 'doc has no ownerDocument';
-is $doc->body->ownerDocument, $doc, 'doc has no ownerDocument';
-is $doc->body->firstChild->ownerDocument, $doc, 'doc has no ownerDocument';
+is $doc->body->ownerDocument, $doc, 'body ownerDocument ok';
+is $doc->body->firstChild->ownerDocument, $doc, 'firstChild ownerDocument ok';
+
+#is $win->ownerWindow, undef, 'window has no ownerWindow';
+is $doc->ownerWindow, $win, 'doc ownerWindow ok';
+is $doc->body->ownerWindow, $win, 'body ownerWindow';
+is $doc->body->firstChild->ownerWindow, $win, 'firstChild ownerDocument ok';
+
 
 # Test getElementsByTagName
 my @elem = $doc->getElementsByTagName("BODY");

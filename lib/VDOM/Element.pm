@@ -43,7 +43,11 @@ sub new {
             $self->{_child_ind} = shift;
             if (@_) {
                 Scalar::Util::weaken(
-                    $self->{_ownerDocument} = $_[0] )
+                    $self->{_ownerWindow} = $_[0] )
+            }
+            if (@_) {
+                Scalar::Util::weaken(
+                    $self->{_ownerDocument} = $_[1] )
             }
         }
     }
