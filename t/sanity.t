@@ -215,7 +215,7 @@ BODY id="mybody" {
 _EOC_
 
 $win->parse(\$src);
-is $win->document->body->firstChild->nodeValue, "hello, world\n\n!...",
+is $win->document->body->firstChild->nodeValue, "hello, world\n",
     'adjacent text nodes merged';
 
 $src = <<'_EOC_';
@@ -249,8 +249,8 @@ ok !defined $n2, 'nextElementSibling not found';
 $n2 = $node->nextSibling;
 ok $n2, 'p#c has nextSibling (a text node)';
 is $n2->nodeType, $VDOM::Node::TEXT_NODE, 'node Type is indeed text';
-is $n2->nodeValue, "\n!...", 'nodeValue ok';
-is $n2->textContent, "\n!...", 'textContent ok';
+is $n2->nodeValue, "\n!", 'nodeValue ok';
+is $n2->textContent, "\n!", 'textContent ok';
 
 my $n3 = $n2->previousElementSibling;
 ok $n3, 'found p#c';

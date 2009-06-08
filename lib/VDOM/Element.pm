@@ -20,40 +20,6 @@ our %NumericFontWeight = (
     lighter => 100,
 );
 
-sub new {
-    my $class = ref $_[0] ? ref shift : shift;
-    #$self->{_childNodes} = [];
-    my $self = bless {
-    }, $class;
-    if (@_) {
-        my $parent = shift;
-        if (defined $parent) {
-
-=begin comment
-            while (my ($key, $val) = each %$parent) {
-                if ($key !~ /^_/) {
-                    #warn "KEY: $key\n";
-                    $self->{$key} = $val;
-                }
-            }
-=cut
-
-            %$self = %$parent;
-            $self->parentNode($parent);
-            $self->{_child_ind} = shift;
-            if (@_) {
-                Scalar::Util::weaken(
-                    $self->{_ownerWindow} = $_[0] )
-            }
-            if (@_) {
-                Scalar::Util::weaken(
-                    $self->{_ownerDocument} = $_[1] )
-            }
-        }
-    }
-    $self;
-}
-
 sub getElementsByTagName {
     my ($self, $tagName) = @_;
     my @elem;
@@ -66,20 +32,6 @@ sub getElementsByTagName {
         }
     }
     @elem;
-}
-
-sub childNodes {
-    my $self = shift;
-    if (@_) {
-        #warn $self;
-        #for my $ref (@_) {
-        #weaken($ref);
-        #}
-        $self->{_childNodes} = [@_];
-    } else {
-        my $val = $self->{_childNodes};
-        return $val ? @$val : ();
-    }
 }
 
 sub parse_line {

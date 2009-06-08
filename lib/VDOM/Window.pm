@@ -95,10 +95,13 @@ sub parse_file {
         if ($first eq '"') {
             ### Found text node...
 
-            my $lastNode;
-            if ($children[0] and $lastNode = $children[0][-1] and
-                    $lastNode->nodeType == $VDOM::Node::TEXT_NODE) {
-                $lastNode->parse_one_more_line(\$_);
+            if (/{\s*$/) {
+                my $child_index = @{ $children[0] };
+                my $node = VDOM::Text->new($parent[0], $child_index, $self, $doc)
+                        ->parse_line(\$_);
+                push @{ $children[0] }, $node;
+                unshift @parent, $node;
+                unshift @children, [];
             } else {
                 my $child_index = @{ $children[0] };
                 push @{ $children[0] },

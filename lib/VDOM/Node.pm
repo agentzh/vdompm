@@ -21,12 +21,24 @@ our $CacheTextContent = 0;
 use Scalar::Util;
 
 sub new {
-    my $proto = ref $_[0] ? ref shift : shift;
+    my $class = ref $_[0] ? ref shift : shift;
+    #$self->{_childNodes} = [];
     my $self = bless {
-    }, $proto;
+    }, $class;
     if (@_) {
         my $parent = shift;
         if (defined $parent) {
+
+=begin comment
+            while (my ($key, $val) = each %$parent) {
+                if ($key !~ /^_/) {
+                    #warn "KEY: $key\n";
+                    $self->{$key} = $val;
+                }
+            }
+=cut
+
+            %$self = %$parent;
             $self->parentNode($parent);
             $self->{_child_ind} = shift;
             if (@_) {
@@ -229,6 +241,19 @@ sub getAttribute {
     return $self->{$attr};
 }
 
+sub childNodes {
+    my $self = shift;
+    if (@_) {
+        #warn $self;
+        #for my $ref (@_) {
+        #weaken($ref);
+        #}
+        $self->{_childNodes} = [@_];
+    } else {
+        my $val = $self->{_childNodes};
+        return $val ? @$val : ();
+    }
+}
 
 =pod
 sub AUTOLOAD {
