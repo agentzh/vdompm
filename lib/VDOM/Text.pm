@@ -3,6 +3,7 @@ package VDOM::Text;
 use strict;
 use warnings;
 
+#use Smart::Comments::JSON '##';
 use base 'VDOM::Node';
 
 use VDOM::Util qw( safe_json_decode );
@@ -34,6 +35,11 @@ sub parse_line {
         } else {
             last;
         }
+    }
+    if ($self->{nodeValue} eq '' && $self->parentNode && defined $self->{pos} && defined $self->{len}) {
+        ## $self->{pos}
+        ## $self->{len}
+        $self->{nodeValue} = substr($self->parentNode->{nodeValue}, $self->{pos}, $self->{len});
     }
     $self;
 }
