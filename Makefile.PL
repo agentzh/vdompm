@@ -9,6 +9,7 @@ perl_version        ('5.006001');
 all_from            ('lib/VDOM.pm');
 
 requires            ('Scalar::Util');
+requires            ('JSON::XS');
 requires            ('Class::Accessor::Fast');
 build_requires      ('Test::More');
 no_index( directory => qw< t inc doc share demo > );
