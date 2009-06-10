@@ -8,7 +8,7 @@ use VDOM::Document;
 use VDOM::Window;
 use VDOM::Text;
 
-our $VERSION = '0.009';
+our $VERSION = '0.010';
 
 1;
 __END__

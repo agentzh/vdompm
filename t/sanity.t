@@ -9,7 +9,7 @@ BEGIN {
     binmode \*STDERR, ":utf8";
 }
 
-use Test::More tests => 168;
+use Test::More tests => 170;
 #use Test::More 'no_plan';
 
 #use Devel::Leak::Object qw( GLOBAL_bless );
@@ -21,12 +21,12 @@ BEGIN { use_ok('VDOM::Window') }
 my $elem = VDOM::Element->new;
 ok $elem, 'VDOM::Element obj ok';
 isa_ok $elem, 'VDOM::Element', 'ref ok';
-$elem->parse_line(\'BODY offsetX=0 offsetY=0 offsetWidth=914 offsetHeight=3361 fontFamily="Arial,Helvetica,sans-serif" fontSize="12px" fontStyle="normal" fontWeight="400" color="rgb(51, 51, 51)" backgroundColor="transparent" {');
+$elem->parse_line(\'BODY x=0 y=0 w=914 h=3361 fontFamily="Arial,Helvetica,sans-serif" fontSize="12px" fontStyle="normal" fontWeight="400" color="rgb(51, 51, 51)" backgroundColor="transparent" {');
 is $elem->tagName, 'BODY', 'tagName ok';
-is $elem->offsetX, 0, 'offsetX';
-is $elem->offsetY, 0, 'offsetY';
-is $elem->offsetWidth, 914, 'offsetWidth';
-is $elem->offsetHeight, 3361, 'offsetHeight';
+is $elem->x, 0, 'x';
+is $elem->y, 0, 'y';
+is $elem->w, 914, 'w';
+is $elem->h, 3361, 'h';
 is $elem->fontFamily, 'Arial,Helvetica,sans-serif', 'font family';
 is $elem->fontSize, '12px', 'fontSize ok';
 is $elem->fontStyle, 'normal', 'fontStyle ok';
@@ -37,10 +37,10 @@ is scalar @child, 0, 'childNodes ok';
 
 $elem = VDOM::Element->new($elem);
 is $elem->tagName, 'BODY', 'tagName ok';
-is $elem->offsetX, 0, 'offsetX';
-is $elem->offsetY, 0, 'offsetY';
-is $elem->offsetWidth, 914, 'offsetWidth';
-is $elem->offsetHeight, 3361, 'offsetHeight';
+is $elem->x, 0, 'x';
+is $elem->y, 0, 'y';
+is $elem->w, 914, 'w';
+is $elem->h, 3361, 'h';
 is $elem->fontFamily, 'Arial,Helvetica,sans-serif', 'font family';
 is $elem->fontSize, '12px', 'fontSize ok';
 is $elem->fontStyle, 'normal', 'fontStyle ok';
@@ -362,10 +362,10 @@ my $src = <<'_EOC_';
 window {
     document {
         BODY fontSize="12px" fontWeight="400" {
-A href="http://api.eeeeworks.org/=/feed/Comment/_user/agentzh.Public" offsetX=166 offsetY=546 offsetWidth=116 offsetHeight=41 fontWeight="bold" color="rgb(51, 153, 204)" {
-    "Subscribe to the comment feed" offsetX=12 offsetY=1 {
-        "" pos=0 len=16 offsetHeight=19
-        "" pos=17 len=12 offsetY=23 offsetWidth=104 offsetHeight=19
+A href="http://api.eeeeworks.org/=/feed/Comment/_user/agentzh.Public" x=166 y=546 w=116 h=41 fontWeight="bold" color="rgb(51, 153, 204)" {
+    "Subscribe to the comment feed" x=12 y=1 {
+        "" pos=0 len=16 h=19
+        "" pos=17 len=12 y=23 w=104 h=19
     }
         }
     }
@@ -378,19 +378,23 @@ my ($A) = $win->document->getElementsByTagName("A");
 ok $A, 'found tag A';
 my $text = $A->firstChild;
 ok $text, 'found the Text Node';
-is $text->offsetX, 12, 'x okay';
-is $text->offsetY, 1, 'y okay';
-is $text->offsetWidth, 116, 'w okay';
-is $text->offsetHeight, 41, 'h okay';
+is $text->x, 12, 'x okay';
+is $text->offsetX, 12, 'offsetX okay';
+
+is $text->y, 1, 'y okay';
+is $text->offsetY, 1, 'offsetY okay';
+
+is $text->w, 116, 'w okay';
+is $text->h, 41, 'h okay';
 isa_ok $text, 'VDOM::Text';
 
 is scalar($text->childNodes), 2, 'two text run';
 my $first_run = $text->firstChild;
 is $first_run->nodeValue, "Subscribe to the", 'first text run ok';
-is $first_run->offsetX, 12, 'x okay';
-is $first_run->offsetY, 1, 'y okay';
-is $first_run->offsetWidth, 116, 'w okay';
-is $first_run->offsetHeight, 19, 'h okay';
+is $first_run->x, 12, 'x okay';
+is $first_run->y, 1, 'y okay';
+is $first_run->w, 116, 'w okay';
+is $first_run->h, 19, 'h okay';
 #warn "Done.";
 }
 
@@ -398,10 +402,10 @@ is $first_run->offsetHeight, 19, 'h okay';
 my $src = <<'_EOC_';
 window {
 document {
-"\n設計不錯，鍵盤手感也不錯。屏幕如很多蛋友所說，容易有指紋印子，在可以當鏡子的界面上，我想這個很難避免。。。\n系統速度也可以，比較實用。\n不過E66的耳機設計非常糟糕，和N73比起來，耳機竟然不能控制音量，不如N73的方便；另外白色的套子很漂亮，可惜，當戴上耳機和繩子后使用皮套非常不便捷。。。敗筆。。\n" offsetWidth=999 offsetHeight=50 {
-    "" pos=1 len=74 offsetHeight=16
-    "" pos=75 len=72 offsetY=17 offsetWidth=974 offsetHeight=16
-    "" pos=147 len=4 offsetY=34 offsetWidth=56 offsetHeight=16
+"\n設計不錯，鍵盤手感也不錯。屏幕如很多蛋友所說，容易有指紋印子，在可以當鏡子的界面上，我想這個很難避免。。。\n系統速度也可以，比較實用。\n不過E66的耳機設計非常糟糕，和N73比起來，耳機竟然不能控制音量，不如N73的方便；另外白色的套子很漂亮，可惜，當戴上耳機和繩子后使用皮套非常不便捷。。。敗筆。。\n" w=999 h=50 {
+    "" pos=1 len=74 h=16
+    "" pos=75 len=72 y=17 w=974 h=16
+    "" pos=147 len=4 y=34 w=56 h=16
 }
 }
 _EOC_

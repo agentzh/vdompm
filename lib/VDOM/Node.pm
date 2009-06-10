@@ -8,10 +8,16 @@ use vars qw($AUTOLOAD);
 use base qw( Class::Accessor::Fast );
 
 __PACKAGE__->mk_accessors(qw{
-    offsetX offsetY offsetWidth offsetHeight color backgroundColor
+    x y w h color backgroundColor
     fontSize fontWidth fontStyle fontWeight tagName fontFamily
     nodeValue
 });
+
+# create aliases for (short-term) backward compatibility (these are deprecated now):
+*VDOM::Node::offsetX = \&x;
+*VDOM::Node::offsetY = \&y;
+*VDOM::Node::offsetWidth = \&w;
+*VDOM::Node::offsetHeight = \&h;
 
 our $ELEMENT_NODE  = 1;
 our $TEXT_NODE     = 3;
@@ -212,7 +218,7 @@ sub pureTextContent {
     my ($self) = @_;
     if ($self->nodeType == $VDOM::Node::TEXT_NODE) {
         return $self->nodeValue;
-    } elsif ($self->tagName eq 'A' && $self->offsetHeight < 100) {
+    } elsif ($self->tagName eq 'A' && $self->h < 100) {
         return '';
     } else {
         return join '', map { $_->pureTextContent } @{ $self->{_childNodes} };
