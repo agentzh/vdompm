@@ -13,6 +13,11 @@ __PACKAGE__->mk_accessors(qw{
     nodeValue
 });
 
+sub VDOM::Node::offsetX;
+sub VDOM::Node::offsetY;
+sub VDOM::Node::offsetWidth;
+sub VDOM::Node::offsetHeight;
+
 # create aliases for (short-term) backward compatibility (these are deprecated now):
 *VDOM::Node::offsetX = \&x;
 *VDOM::Node::offsetY = \&y;
@@ -192,6 +197,12 @@ sub textContent {
         $self->{_cached_text_content} = $_;
     }
     return $_;
+}
+
+sub packedTextContent {
+    my $self = shift;
+    (my $txt = $self->textContent) =~ s/\s+/ /gs;
+    $txt;
 }
 
 sub textContentWithImgAlt {
