@@ -24,6 +24,7 @@ sub VDOM::Node::offsetHeight;
 *VDOM::Node::offsetWidth = \&w;
 *VDOM::Node::offsetHeight = \&h;
 
+
 our $ELEMENT_NODE  = 1;
 our $TEXT_NODE     = 3;
 our $DOCUMENT_NODE = 9;
@@ -256,6 +257,15 @@ sub setAttribute {
 sub getAttribute {
     my ($self, $attr) = @_;
     return $self->{$attr};
+}
+
+
+sub attr {
+    my $self = shift;
+    if (@_ == 1) {
+        return $self->getAttribute(@_);
+    }
+    return $self->setAttribute(@_);
 }
 
 sub childNodes {

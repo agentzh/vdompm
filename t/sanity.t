@@ -9,7 +9,7 @@ BEGIN {
     binmode \*STDERR, ":utf8";
 }
 
-use Test::More tests => 170;
+use Test::More tests => 172;
 #use Test::More 'no_plan';
 
 #use Devel::Leak::Object qw( GLOBAL_bless );
@@ -192,6 +192,9 @@ is scalar(@elem), 0, 'no BODY found on BODY';
 
 $body->setAttribute('foo', 32);
 is $body->getAttribute('foo'), 32, 'set/getAttribute ok';
+is $body->attr('foo'), 32, 'attr read ok';
+$body->attr('foo', 47);
+is $body->attr('foo'), 47, 'attr write ok';
 
 # Test getElementById
 
