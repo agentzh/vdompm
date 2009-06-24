@@ -24,10 +24,10 @@ sub VDOM::Node::offsetHeight;
 *VDOM::Node::offsetWidth = \&w;
 *VDOM::Node::offsetHeight = \&h;
 
-
 our $ELEMENT_NODE  = 1;
 our $TEXT_NODE     = 3;
 our $DOCUMENT_NODE = 9;
+our $COLLECTION_NODE = 100;
 our $CacheTextContent = 0;
 
 use Scalar::Util;
@@ -280,6 +280,28 @@ sub childNodes {
         my $val = $self->{_childNodes};
         return $val ? @$val : ();
     }
+}
+
+sub inflated {
+    my $self = shift;
+    my $parent = $self;
+    while ($parent) {
+        my $new_parent = $parent->parentNode;
+        if ($new_parent->childNodes != 1 ||
+            $new_parent->x > $self->x ||
+            $new_parent->y > $self->y ||
+            $new_parent->h < $self->h ||
+            $new_parent->w < $self->w) {
+            last;
+        }
+        $parent = $new_parent;
+    }
+    return {
+        x => $parent->x,
+        y => $parent->y,
+        w => $parent->w,
+        h => $parent->h,
+    };
 }
 
 =pod
