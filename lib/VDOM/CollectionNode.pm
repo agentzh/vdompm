@@ -42,6 +42,9 @@ sub nodeType {
 sub inflated {
     my $self = shift;
     my ($min_left, $min_top, $max_right, $max_bottom);
+    #if ($self->size == 0) {
+        #die "0 size!\n";
+        #}
     for my $elem ($self->elems) {
         my $inflated = $elem->inflated;
         ## $inflated
