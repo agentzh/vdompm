@@ -5,13 +5,29 @@ use strict;
 use warnings;
 
 use vars qw($AUTOLOAD);
-use base qw( Class::Accessor::Fast );
+#use base qw( Class::Accessor::Fast );
+use Class::XSAccessor
+    accessors => {
+        x => 'x',
+        y => 'y',
+        w => 'w',
+        h => 'h',
+        color => 'color',
+        backgroundColor => 'backgroundColor',
+        fontSize => 'fontSize',
+        fontWidth => 'fontWidth',
+        fontStyle => 'fontStyle',
+        fontWeight => 'fontWeight',
+        tagName => 'tagName',
+        fontFamily => 'fontFamily',
+        nodeValue => 'nodeValue',
+    };
 
-__PACKAGE__->mk_accessors(qw{
-    x y w h color backgroundColor
-    fontSize fontWidth fontStyle fontWeight tagName fontFamily
-    nodeValue
-});
+#__PACKAGE__->mk_accessors(qw{
+    #x y w h color backgroundColor
+    #fontSize fontWidth fontStyle fontWeight tagName fontFamily
+    #nodeValue
+#});
 
 sub VDOM::Node::offsetX;
 sub VDOM::Node::offsetY;

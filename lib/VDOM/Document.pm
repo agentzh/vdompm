@@ -4,9 +4,16 @@ use strict;
 use warnings;
 
 use base 'VDOM::Element';
-__PACKAGE__->mk_accessors(qw{
-    width height body title
-});
+#__PACKAGE__->mk_accessors(qw{
+#width height body title
+#});
+use Class::XSAccessor
+    accessors => {
+        width => 'width',
+        height => 'height',
+        body => 'body',
+        title => 'title',
+    };
 
 sub new {
     my $proto = ref $_[0] ? ref shift : shift;

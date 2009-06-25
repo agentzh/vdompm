@@ -10,7 +10,7 @@ all_from            ('lib/VDOM.pm');
 
 requires            ('Scalar::Util');
 requires            ('JSON::XS');
-requires            ('Class::Accessor::Fast');
+requires            ('Class::XSAccessor');
 build_requires      ('Test::More');
 no_index( directory => qw< t inc doc share demo > );
 

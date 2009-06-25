@@ -9,10 +9,21 @@ use VDOM::Element;
 
 use base 'VDOM::Element';
 
-__PACKAGE__->mk_accessors(qw{
-    location scrollMaxX scrollMaxY innerWidth innerHeight
-    outerWidth outerHeight
-});
+use Class::XSAccessor
+    accessors => {
+        location => 'location',
+        scrollMaxX => 'scrollMaxX',
+        scrollMaxY => 'scrollMaxY',
+        innerWidth => 'innerWidth',
+        innerHeight => 'innerHeight',
+        outerWidth => 'outerWidth',
+        outerHeight => 'outerHeight',
+    };
+
+#__PACKAGE__->mk_accessors(qw{
+#location scrollMaxX scrollMaxY innerWidth innerHeight
+#outerWidth outerHeight
+#});
 
 sub new {
     my $proto = ref $_[0] ? ref shift : shift;

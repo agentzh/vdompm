@@ -5,13 +5,24 @@ use warnings;
 
 use VDOM::Util qw( safe_json_decode );
 use Scalar::Util qw( weaken );
-
 use base 'VDOM::Node';
-__PACKAGE__->mk_accessors(qw{
-    id className href name
-    title alt src
-    numericFontSize numericFontWeight
-});
+
+use Class::XSAccessor
+    accessors => {
+        id => 'id',
+        className => 'className',
+        href => 'href',
+        name => 'name',
+        title => 'title',
+        alt => 'alt',
+        src => 'src',
+    };
+
+#__PACKAGE__->mk_accessors(qw{
+    #id className href name
+    #title alt src
+    #numericFontSize numericFontWeight
+#});
 
 our %NumericFontWeight = (
     bolder  => 900,

@@ -5,7 +5,7 @@ use warnings;
 use base 'VDOM::Node';
 
 #use Smart::Comments::JSON '##';
-use base qw( Class::Accessor::Fast );
+#use base qw( Class::Accessor::Fast );
 
 sub new {
     my $class = ref $_[0] ? ref shift : shift;
