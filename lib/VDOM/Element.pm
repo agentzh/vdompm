@@ -21,15 +21,7 @@ use Class::XSAccessor
 #__PACKAGE__->mk_accessors(qw{
     #id className href name
     #title alt src
-    #numericFontSize numericFontWeight
 #});
-
-our %NumericFontWeight = (
-    bolder  => 900,
-    bold    => 700,
-    normal  => 400,
-    lighter => 100,
-);
 
 sub getElementsByTagName {
     my ($self, $tagName) = @_;
@@ -92,26 +84,6 @@ sub _getElementById {
         }
     }
     @elem;
-}
-
-sub numericFontWeight {
-    my $self = shift;
-    my $fontWeight = $self->{fontWeight};
-    if ($fontWeight =~ /\d+/) {
-        return $&;
-    } else {
-        return $NumericFontWeight{$fontWeight} || 0;
-    }
-}
-
-sub numericFontSize {
-    my $self = shift;
-    my $fontSize = $self->{fontSize};
-    if ($fontSize =~ /\d+/) {
-        return $&;
-    } else {
-        die "fontSize not numerical: $fontSize\n";
-    }
 }
 
 1;

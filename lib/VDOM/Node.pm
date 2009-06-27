@@ -6,6 +6,8 @@ use warnings;
 
 use vars qw($AUTOLOAD);
 #use base qw( Class::Accessor::Fast );
+
+use Scalar::Util;
 use Class::XSAccessor
     accessors => {
         x => 'x',
@@ -46,7 +48,12 @@ our $DOCUMENT_NODE = 9;
 our $COLLECTION_NODE = 100;
 our $CacheTextContent = 0;
 
-use Scalar::Util;
+our %NumericFontWeight = (
+    bolder  => 900,
+    bold    => 700,
+    normal  => 400,
+    lighter => 100,
+);
 
 sub new {
     my $class = ref $_[0] ? ref shift : shift;
@@ -218,7 +225,8 @@ sub textContent {
 
 sub packedTextContent {
     my $self = shift;
-    (my $txt = $self->textContent) =~ s/\s+/ /gs;
+    (my $txt = $self->textContent) =~ s/^\s+|\s+$//gs;
+    $txt =~ s/\s\s+/ /g;
     $txt;
 }
 
@@ -318,6 +326,26 @@ sub inflated {
         w => $parent->w,
         h => $parent->h,
     };
+}
+
+sub numericFontWeight {
+    my $self = shift;
+    my $fontWeight = $self->{fontWeight};
+    if ($fontWeight =~ /\d+/) {
+        return $&;
+    } else {
+        return $NumericFontWeight{$fontWeight} || 0;
+    }
+}
+
+sub numericFontSize {
+    my $self = shift;
+    my $fontSize = $self->{fontSize};
+    if ($fontSize =~ /\d+/) {
+        return $&;
+    } else {
+        die "fontSize not numerical: $fontSize\n";
+    }
 }
 
 =pod
