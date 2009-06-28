@@ -31,7 +31,12 @@ for my $text (@texts) {
           w => $text->w,
           h => $text->h,
           borderColor => 'red',
-          desc => $text->nodeValue,
+          desc => "Content: [" . $text->nodeValue . "]\n".
+                    "Font Size: " . $text->fontSize . "\n".
+                    "Font Color: " . $text->color . "\n".
+                    "Background Color: " . $text->backgroundColor . "\n".
+                    "Geometry: " . $text->w . 'x' . $text->h . '@('.
+                        $text->x . ', ' . $text->y . ")\n",
           title => 'TEXT NODE',
       }];
 }
