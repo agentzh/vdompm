@@ -378,4 +378,8 @@ sub delete {
 }
 =cut
 
+sub xpath {
+
+}
+
 1;
