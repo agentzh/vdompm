@@ -6,6 +6,7 @@ use base 'VDOM::Node';
 
 #use Smart::Comments::JSON '##';
 #use base qw( Class::Accessor::Fast );
+use List::MoreUtils qw( uniq );
 
 sub new {
     my $class = ref $_[0] ? ref shift : shift;
@@ -77,6 +78,15 @@ sub textContent {
         $txt .= $elem->textContent;
     }
     $txt;
+}
+
+sub color {
+    my $self = shift;
+    my @color;
+    for my $elem ($self->elems) {
+        push @color, $elem;
+    }
+    return uniq @color;
 }
 
 1;

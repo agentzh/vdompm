@@ -8,6 +8,7 @@ use VDOM::Document;
 use VDOM::Window;
 use VDOM::Text;
 use VDOM::CollectionNode;
+use VDOM::Color;
 
 our $VERSION = '0.010';
 
