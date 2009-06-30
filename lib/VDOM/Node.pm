@@ -378,8 +378,13 @@ sub delete {
 }
 =cut
 
-sub xpath {
-
+sub simple_xpath {
+    #my $self = shift;
+    #$my $parent = $self;
+    #while ($parent) {
+    #$
+    #$parent = $parent->parentNode;
+    #}
 }
 
 1;
