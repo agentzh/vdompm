@@ -4,11 +4,6 @@ use warnings;
 use encoding 'utf8';
 use lib 'lib';
 
-BEGIN {
-    binmode \*STDOUT, ":utf8";
-    binmode \*STDERR, ":utf8";
-}
-
 use Test::More tests => 172;
 #use Test::More 'no_plan';
 

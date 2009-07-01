@@ -74,6 +74,8 @@ sub new {
 =cut
 
             %$self = %$parent;
+            delete $self->{id};
+            delete $self->{className};
             $self->parentNode($parent);
             $self->{_child_ind} = shift;
             if (@_) {
@@ -378,13 +380,57 @@ sub delete {
 }
 =cut
 
-sub simple_xpath {
-    #my $self = shift;
-    #$my $parent = $self;
-    #while ($parent) {
-    #$
-    #$parent = $parent->parentNode;
-    #}
+sub simple_selector {
+    my $self = shift;
+    while (defined $self && $self->nodeType == $VDOM::Node::TEXT_NODE) {
+        $self = $self->parentNode;
+    }
+    my $selector;
+    while (1) {
+        last if !defined $self;
+        my $id = $self->id;
+        my $tag = $self->tagName;
+        my $locator = $tag;
+        if (defined $selector) {
+            $selector = $locator . '>' . $selector;
+        } else {
+            $selector = $locator;
+        }
+        last if $tag eq 'BODY';
+        $self = $self->parentNode;
+    }
+    return $selector;
+}
+
+sub selector {
+    my $self = shift;
+    while (defined $self && $self->nodeType == $VDOM::Node::TEXT_NODE) {
+        $self = $self->parentNode;
+    }
+    my $selector;
+    while (1) {
+        last if !defined $self;
+        my $id = $self->id;
+        my $tag = $self->tagName;
+        my $class_name = $self->className;
+        if (defined $class_name) {
+            $class_name = (split /\s+/, $class_name)[0];
+        }
+        my $locator = $tag;
+        if (defined $selector && defined $id && $id =~ /^[-\w]+$/) {
+            $locator .= "#$id";
+        } elsif (defined $class_name && $class_name =~ /^[-\w]+$/) {
+            $locator .= ".$class_name";
+        }
+        if (defined $selector) {
+            $selector = $locator . '>' . $selector;
+        } else {
+            $selector = $locator;
+        }
+        last if $tag eq 'BODY';
+        $self = $self->parentNode;
+    }
+    return $selector;
 }
 
 1;
