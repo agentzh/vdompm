@@ -1,6 +1,6 @@
 package VDOM::Node;
 
-#use Smart::Comments;
+#use Smart::Comments::JSON '##sel';
 use strict;
 use warnings;
 
@@ -407,17 +407,19 @@ sub selector {
     while (defined $self && $self->nodeType == $VDOM::Node::TEXT_NODE) {
         $self = $self->parentNode;
     }
+    #warn "HERE!";
     my $selector;
     while (1) {
         last if !defined $self;
         my $id = $self->id;
         my $tag = $self->tagName;
         my $class_name = $self->className;
+        ##sel $id $tag $class_name
         if (defined $class_name) {
             $class_name = (split /\s+/, $class_name)[0];
         }
         my $locator = $tag;
-        if (defined $selector && defined $id && $id =~ /^[-\w]+$/) {
+        if (defined $id && $id =~ /^[-\w]+$/) {
             $locator .= "#$id";
         } elsif (defined $class_name && $class_name =~ /^[-\w]+$/) {
             $locator .= ".$class_name";
