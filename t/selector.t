@@ -30,7 +30,7 @@ $win->parse(\$src);
 my $p = $win->document->body->firstChild->firstChild->firstChild;
 ok defined $p, 'the P#hello found';
 is $p->simpleSelector, 'BODY>DIV>P>P', 'simple selector ok';
-is $p->selector, 'BODY#mybody>DIV#foo-bar>P.c>P#hello', 'simple selector ok';
+is $p->selector, 'BODY#mybody>DIV#foo-bar>P.c>P#hello', 'full selector ok';
 ok $p->matchSelector({tag => 'P', id => 'hello'}), 'P#hello matched';
 ok $p->matchSelector({tag => 'P'}), 'P#hello matched';
 ok !$p->matchSelector({tag => 'B'}), 'P#hello not matched';
