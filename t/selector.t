@@ -35,8 +35,16 @@ isa_ok $win, 'VDOM::Window', 'ref ok';
 $win->parse(\$src);
 my $p = $win->document->body->firstChild->firstChild->firstChild;
 ok defined $p, 'the P#hello found';
+
 is $p->simpleSelector, 'BODY>DIV>P>P', 'simple selector ok';
+is $p->simpleSelector($p->parentNode->parentNode), 'DIV>P>P',
+    'relative simple selector ok';
+is $p->simpleSelector($p->parentNode), 'P>P', 'relative simple selector ok';
+
 is $p->selector, 'BODY#mybody>DIV#foo-bar>P.c>P#hello', 'full selector ok';
+is $p->selector($p->parentNode->parentNode), 'DIV#foo-bar>P.c>P#hello',
+    'relative selector ok';
+
 ok $p->matchSelector({tag => 'P', id => 'hello'}), 'P#hello matched';
 ok $p->matchSelector({tag => 'P'}), 'P#hello matched';
 ok !$p->matchSelector({tag => 'B'}), 'P#hello not matched';

@@ -7,7 +7,7 @@ use warnings;
 use vars qw($AUTOLOAD);
 #use base qw( Class::Accessor::Fast );
 
-use Scalar::Util;
+use Scalar::Util qw( refaddr );
 use Class::XSAccessor
     accessors => {
         x => 'x',
@@ -381,7 +381,7 @@ sub delete {
 =cut
 
 sub simpleSelector {
-    my $self = shift;
+    my ($self, $root) = @_;
     while (defined $self && $self->nodeType == $VDOM::Node::TEXT_NODE) {
         $self = $self->parentNode;
     }
@@ -396,14 +396,15 @@ sub simpleSelector {
         } else {
             $selector = $locator;
         }
-        last if $tag eq 'BODY';
+        last if $tag eq 'BODY' ||
+            (defined $root && refaddr $self == refaddr $root);
         $self = $self->parentNode;
     }
     return $selector;
 }
 
 sub selector {
-    my $self = shift;
+    my ($self, $root) = @_;
     while (defined $self && $self->nodeType == $VDOM::Node::TEXT_NODE) {
         $self = $self->parentNode;
     }
@@ -429,7 +430,8 @@ sub selector {
         } else {
             $selector = $locator;
         }
-        last if $tag eq 'BODY';
+        last if $tag eq 'BODY' ||
+            (defined $root && refaddr $self == refaddr $root);
         $self = $self->parentNode;
     }
     return $selector;
