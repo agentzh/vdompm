@@ -380,7 +380,7 @@ sub delete {
 }
 =cut
 
-sub simple_selector {
+sub simpleSelector {
     my $self = shift;
     while (defined $self && $self->nodeType == $VDOM::Node::TEXT_NODE) {
         $self = $self->parentNode;
@@ -433,6 +433,63 @@ sub selector {
         $self = $self->parentNode;
     }
     return $selector;
+}
+
+sub getElementsBySelector {
+    my ($self, $selector) = @_;
+    $selector =~ s/\s+//g;
+    my @pats = split />/, $selector;
+    for my $pat (@pats) {
+        if ($pat =~ /^(\w+)$/) {
+            $pat = {
+                tag => $1,
+            };
+        } elsif ($pat =~ /^(\w+)\#([-\w]+)$/) {
+            $pat = {
+                tag => $1,
+                id => $2,
+            };
+        } elsif ($pat =~ /^(\w+)\.([-\w]+)$/) {
+            $pat = {
+                tag => $1,
+                class => $2,
+            };
+        } else {
+            die "Syntax error found in the selector: $pat\n";
+        }
+    }
+    ##sel @pats
+    return $self->getElementsBySelectorHelper(\@pats);
+}
+
+sub getElementsBySelectorHelper {
+    my ($self, $pats) = @_;
+    if (!@$pats) {
+        return ();
+    }
+    if ($self->matchSelector($pats->[0])) {
+        ##sel matched elem: $self->tagName
+        my ($pat, @sub_pats) = @$pats;
+        if (!@sub_pats) {
+            return ($self);
+        }
+        my @res;
+        for my $child ($self->childNodes) {
+            push @res, $child->getElementsBySelectorHelper(\@sub_pats);
+        }
+        return @res;
+    }
+    return ();
+}
+
+sub matchSelector {
+    my ($self, $pat) = @_;
+    return 0 if defined $pat->{tag} && $self->tagName ne $pat->{tag} ||
+        defined $pat->{id} &&
+            (!defined $self->id || $self->id ne $pat->{id}) ||
+        defined $pat->{class} &&
+            (!defined $self->className || $self->className !~ /\b\Q$pat->{class}\E\b/);
+    return 1;
 }
 
 1;
