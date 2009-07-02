@@ -327,6 +327,7 @@ sub inflated {
         y => $parent->y,
         w => $parent->w,
         h => $parent->h,
+        elem => $parent,
     };
 }
 
@@ -417,12 +418,14 @@ sub selector {
         my $class_name = $self->className;
         ##sel $id $tag $class_name
         if (defined $class_name) {
-            $class_name = (split /\s+/, $class_name)[0];
+            my @class_names = grep { /^[-A-Za-z_]+$/ }
+                split /\s+/, $class_name;
+            $class_name = shift @class_names;
         }
         my $locator = $tag;
-        if (defined $id && $id =~ /^[-\w]+$/) {
+        if (defined $id && $id =~ /^[-A-Za-z_]+$/) {
             $locator .= "#$id";
-        } elsif (defined $class_name && $class_name =~ /^[-\w]+$/) {
+        } elsif (defined $class_name) {
             $locator .= ".$class_name";
         }
         if (defined $selector) {
