@@ -469,7 +469,7 @@ sub getElementsBySelector {
 
 sub getElementsBySelectorHelper {
     my ($self, $pats) = @_;
-    if (!@$pats) {
+    if (!@$pats || $self->nodeType == $VDOM::Node::TEXT_NODE) {
         return ();
     }
     if ($self->matchSelector($pats->[0])) {

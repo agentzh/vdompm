@@ -104,3 +104,24 @@ ok $p->parentNode->matchSelector({tag => 'P', class=>'d'}), 'P.c .d matched';
     }
 }
 
+{
+    my $src = <<'_EOC_';
+window location="http://www.yahoo.com/\"" innerHeight=27 {
+document width=600 height=800 title="Human & Machine" {
+BODY id="mybody" {
+    P className="a" {
+    "hello"
+    }
+}
+}
+}
+_EOC_
+
+    my $win = VDOM::Window->new;
+    ok $win, 'VDOM::Window obj ok';
+    isa_ok $win, 'VDOM::Window', 'ref ok';
+    $win->parse(\$src);
+    my @res = $win->document->body->getElementsBySelector("BODY>P.a>P.a>DIV");
+    ok !@res, 'no results found as expected';
+}
+
