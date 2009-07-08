@@ -8,6 +8,9 @@ use vars qw($AUTOLOAD);
 #use base qw( Class::Accessor::Fast );
 
 use Scalar::Util qw( refaddr );
+use List::MoreUtils qw( firstidx );
+use List::Util qw( first );
+
 use Class::XSAccessor
     accessors => {
         x => 'x',
@@ -495,6 +498,63 @@ sub matchSelector {
         defined $pat->{class} &&
             (!defined $self->className || $self->className !~ /\b\Q$pat->{class}\E\b/);
     return 1;
+}
+
+sub xpath {
+    my ($self) = @_;
+
+    if (exists $self->{xpath}) {
+        return $self->{xpath};
+    } else {
+        # compute
+        my $xpath = '';
+        my $curr = $self;
+        my $parent = $self->parentNode;
+        while ($parent) {
+            my $tag = $curr->tagName;
+            my $curr_xpath = '/' . $tag;
+
+            my $idx = firstidx { $_ == $curr } grep {$_->tagName eq $tag} $parent->childNodes;
+            if ($idx > 0) {
+                $curr_xpath .= "[$idx]";
+            }
+            $xpath = $curr_xpath . $xpath;
+
+            $curr = $parent;
+            $parent = $parent->parentNode;
+        }
+        $self->{xpath} = $xpath;
+        $xpath
+    }
+}
+
+sub getNodeByXpath {
+    my ($self, $xpath) = @_;
+
+    my $node;
+    my $rel_xpath;
+    if ($xpath =~ /^\/(?:document|html)\/(.*)/i) {
+        $node = $self->ownerDocument;
+        $rel_xpath = $1;
+    } else { # relative
+        $node = $self;
+        $rel_xpath = $xpath;
+    }
+
+    my @paths = split /\//, $rel_xpath;
+    for my $path (@paths) {
+        next if !$path;
+
+        my ($tag, $idx) = split /[\[\]]/, $path;
+        $tag = uc $tag;
+
+        $node = first {$_->tagName eq $tag &&
+                    (!$idx || $idx-- == 0) }
+                $node->childNodes;
+        return $node if !$node;
+    }
+
+    return $node;
 }
 
 1;
