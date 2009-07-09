@@ -4,12 +4,12 @@ package VDOM::Node;
 use strict;
 use warnings;
 
-use vars qw($AUTOLOAD);
+#use vars qw($AUTOLOAD);
 #use base qw( Class::Accessor::Fast );
 
 use Scalar::Util qw( refaddr );
-use List::MoreUtils qw( firstidx );
-use List::Util qw( first );
+use List::MoreUtils ();
+use List::Util ();
 
 use Class::XSAccessor
     accessors => {
@@ -514,7 +514,8 @@ sub xpath {
             my $tag = $curr->tagName;
             my $curr_xpath = '/' . $tag;
 
-            my $idx = firstidx { $_ == $curr } grep {$_->tagName eq $tag} $parent->childNodes;
+            my $idx = List::MoreUtils::firstidx { $_ == $curr }
+                grep {$_->tagName eq $tag} $parent->childNodes;
             if ($idx > 0) {
                 $curr_xpath .= "[$idx]";
             }
@@ -548,7 +549,7 @@ sub getNodeByXpath {
         my ($tag, $idx) = split /[\[\]]/, $path;
         $tag = uc $tag;
 
-        $node = first {$_->tagName eq $tag &&
+        $node = List::Util::first {$_->tagName eq $tag &&
                     (!$idx || $idx-- == 0) }
                 $node->childNodes;
         return $node if !$node;
