@@ -61,6 +61,21 @@ sub parse_line {
     $self;
 }
 
+sub host {
+    my ($self) = @_;
+    if (exists $self->{host}) {
+        return $self->{host};
+    } else {
+        my $loc = $self->location;
+        if ($loc && $loc =~ m{^\w+://([^/:]+)}) {
+            $self->{host} = $1;
+            return $1;
+        }
+        $self->{host} = undef;
+        undef;
+    }
+}
+
 sub document {
     my $self = shift;
     if (@_) {

@@ -535,7 +535,13 @@ sub getNodeByXpath {
     my $node;
     my $rel_xpath;
     if ($xpath =~ /^\/(?:document|html)\/(.*)/i) {
-        $node = $self->ownerDocument;
+        if ($self->tagName eq 'window') {
+            $node = $self->document;
+        } elsif ($self->tagName eq 'document') {
+            $node = $self;
+        } else {
+            $node = $self->ownerDocument;
+        }
         $rel_xpath = $1;
     } else { # relative
         $node = $self;
@@ -545,7 +551,6 @@ sub getNodeByXpath {
     my @paths = split /\//, $rel_xpath;
     for my $path (@paths) {
         next if !$path;
-
         my ($tag, $idx) = split /[\[\]]/, $path;
         $tag = uc $tag;
 
