@@ -160,4 +160,16 @@ sub ownerDocument {
     return $first ? $first->ownerDocument : undef;
 }
 
+sub ownerWindow {
+    my $self = shift;
+
+    my $first = $self->first;
+    return $first ? $first->ownerWindow : undef;
+}
+
+sub textContent {
+    my ($self) = @_;
+    return join '', map { $_->textContent } @{ $self->{_elems} };
+}
+
 1;

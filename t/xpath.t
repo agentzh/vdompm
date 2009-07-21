@@ -16,7 +16,7 @@ document width=600 height=800 title="Human & Machine" {
 BODY id="mybody" {
     DIV id="foo-bar" className="a b" {
         P className="c d" {
-            P id="hello" {
+            DIV id="hello" {
             }
         }
         P className="d" {
@@ -38,7 +38,7 @@ my $doc = $win->ownerDocument;
 my $p = $win->document->body->firstChild->firstChild->firstChild;
 
 my $xpath = $p->xpath;
-is $xpath, '/document/BODY/DIV/P/P', 'xpath ok';
+is $xpath, '/document/BODY/DIV/P/DIV', 'xpath ok';
 is refaddr($p->getNodeByXpath($xpath)), refaddr($p), 'get node by xpath ok';
 
 $p = $win->document->body->firstChild->firstChild->nextSibling->firstChild;

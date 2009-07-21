@@ -509,7 +509,7 @@ sub xpath {
         # compute
         my $xpath = '';
         my $curr = $self;
-        my $parent = $self->parentNode;
+        my $parent = $curr->parentNode;
         while ($parent) {
             my $tag = $curr->tagName;
             my $curr_xpath = '/' . $tag;
