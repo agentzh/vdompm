@@ -90,16 +90,6 @@ sub inflated {
     };
 }
 
-sub textContent {
-    my $self = shift;
-    my $txt;
-    for my $elem ($self->elems) {
-        #warn "HERE!";
-        $txt .= $elem->textContent;
-    }
-    $txt;
-}
-
 sub color {
     my $self = shift;
     my @color;
