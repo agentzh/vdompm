@@ -512,12 +512,13 @@ sub xpath {
         my $parent = $curr->parentNode;
         while ($parent) {
             my $tag = $curr->tagName;
+
             my $curr_xpath = '/' . $tag;
 
-            my $idx = List::MoreUtils::firstidx { $_ == $curr }
-                grep {$_->tagName eq $tag} $parent->childNodes;
-            if ($idx > 0) {
-                $curr_xpath .= "[$idx]";
+            my @tag_set = grep {$_->tagName eq $tag} $parent->childNodes;
+            my $idx = List::MoreUtils::firstidx { $_ == $curr } @tag_set;
+            if (@tag_set > 1 && $idx >= 0 ) {
+                $curr_xpath .= "[" . ($idx + 1) . "]";
             }
             $xpath = $curr_xpath . $xpath;
 
@@ -555,7 +556,7 @@ sub getNodeByXpath {
         $tag = uc $tag;
 
         $node = List::Util::first {$_->tagName eq $tag &&
-                    (!$idx || $idx-- == 0) }
+                    (!$idx || --$idx == 0) }
                 $node->childNodes;
         return $node if !$node;
     }

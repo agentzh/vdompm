@@ -38,21 +38,21 @@ my $doc = $win->ownerDocument;
 my $p = $win->document->body->firstChild->firstChild->firstChild;
 
 my $xpath = $p->xpath;
-is $xpath, '/document/BODY/DIV/P/DIV', 'xpath ok';
+is $xpath, '/document/BODY/DIV/P[1]/DIV', 'xpath ok';
 is refaddr($p->getNodeByXpath($xpath)), refaddr($p), 'get node by xpath ok';
 
 $p = $win->document->body->firstChild->firstChild->nextSibling->firstChild;
 
 $xpath = $p->xpath;
-is $xpath, '/document/BODY/DIV/P[1]/A', 'xpath ok';
+is $xpath, '/document/BODY/DIV/P[2]/A', 'xpath ok';
 is refaddr($p->getNodeByXpath($xpath)), refaddr($p), 'get node by xpath ok';
 
-is refaddr($p->getNodeByXpath('/HTML/BODY/DIV/P[1]/A')), refaddr($p), 'get node by xpath ok';
+is refaddr($p->getNodeByXpath('/HTML/BODY/DIV/P[2]/A')), refaddr($p), 'get node by xpath ok';
 
-ok !$p->getNodeByXpath('/HTML/BODY/DIV/P[2]/A'), 'get node by xpath ok';
+ok !$p->getNodeByXpath('/HTML/BODY/DIV/P[3]/A'), 'get node by xpath ok';
 
 my $div = $p->getNodeByXpath('/HTML/BODY/div/');
 ok $div, 'get div ok';
 is $div->tagName, 'DIV', 'get div tagname ok';
 
-is refaddr($div->getNodeByXpath('P[1]/A/')), refaddr($p), 'get node by relative xpath ok';
+is refaddr($div->getNodeByXpath('P[2]/A/')), refaddr($p), 'get node by relative xpath ok';
