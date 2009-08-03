@@ -86,4 +86,69 @@ sub _getElementById {
     @elem;
 }
 
+sub fromVdom {
+    my ($class, $src, $win, $doc, $parents, $children) = @_;
+    my $in;
+    if (ref $src) {
+        $in = $src;
+    } else {
+        #warn "Found handle: $in\n";
+        open $in, '<', \$src;
+    }
+    my @parent = defined $parents ? @$parents : ();
+    my @children = defined $children ? @$children : ([]);
+    while (<$in>) {
+        my $node;
+        chomp;
+        s/^\s+//;
+        next if $_ eq '';
+        my $first = substr($_, 0, 1);
+
+        ### parsing: $_
+        if ($first eq '"') {
+            ### Found text node...
+
+            if (/{\s*$/) {
+                my $child_index = @{ $children[0] };
+                my $node = VDOM::Text->new($parent[0], $child_index, $win, $doc)
+                        ->parse_line(\$_);
+                push @{ $children[0] }, $node;
+                unshift @parent, $node;
+                unshift @children, [];
+            } else {
+                my $child_index = @{ $children[0] };
+                push @{ $children[0] },
+                    VDOM::Text->new($parent[0], $child_index, $win, $doc)
+                        ->parse_line(\$_);
+            }
+            ### @children
+            ### @parent
+        } elsif ($first eq '}') {
+            ### closing node...
+            if (!@parent) {
+                die "Syntax error in VDOM: Line $.: Unexpected } found.\n";
+            }
+            my $children = $children[0];
+            if (defined $parent[0]) {
+                $parent[0]->childNodes(@$children);
+            }
+            shift @children;
+            shift @parent;
+            ### @children
+            ### @parent
+        } else { # must be an element
+            ### found an element node...
+            my $child_index = @{ $children[0] };
+            my $node = VDOM::Element->new($parent[0], $child_index, $win, $doc)
+                    ->parse_line(\$_);
+            push @{ $children[0] }, $node;
+            unshift @parent, $node;
+            unshift @children, [];
+            ### @children
+            ### @parent
+        }
+    }
+
+}
+
 1;

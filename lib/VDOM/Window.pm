@@ -31,6 +31,8 @@ sub new {
     }, $proto;
 }
 
+*fromVdom = \&parse;
+
 sub parse {
     my ($self, $rsrc) = @_;
     open my $in, '<', $rsrc;
@@ -110,55 +112,7 @@ sub parse_file {
 
     my @parent = ($doc, $self);
     my @children = ([], $self->{_childNodes});
-    while (<$in>) {
-        my $node;
-        chomp;
-        s/^\s+//;
-        next if $_ eq '';
-        my $first = substr($_, 0, 1);
-
-        ### parsing: $_
-        if ($first eq '"') {
-            ### Found text node...
-
-            if (/{\s*$/) {
-                my $child_index = @{ $children[0] };
-                my $node = VDOM::Text->new($parent[0], $child_index, $self, $doc)
-                        ->parse_line(\$_);
-                push @{ $children[0] }, $node;
-                unshift @parent, $node;
-                unshift @children, [];
-            } else {
-                my $child_index = @{ $children[0] };
-                push @{ $children[0] },
-                    VDOM::Text->new($parent[0], $child_index, $self, $doc)
-                        ->parse_line(\$_);
-            }
-            ### @children
-            ### @parent
-        } elsif ($first eq '}') {
-            ### closing node...
-            if (!@parent) {
-                die "Syntax error in VDOM: Line $.: Unexpected } found.\n";
-            }
-            my $children = $children[0];
-            $parent[0]->childNodes(@$children);
-            shift @children;
-            shift @parent;
-            ### @children
-            ### @parent
-        } else { # must be an element
-            ### found an element node...
-            my $child_index = @{ $children[0] };
-            my $node = VDOM::Element->new($parent[0], $child_index, $self, $doc)
-                    ->parse_line(\$_);
-            push @{ $children[0] }, $node;
-            unshift @parent, $node;
-            unshift @children, [];
-            ### @children
-            ### @parent
-        }
-    }
+    VDOM::Element->fromVdom($in, $self, $doc, \@parent, \@children);
     $self;
 }
 
