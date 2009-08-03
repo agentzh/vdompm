@@ -10,6 +10,7 @@ use warnings;
 use Scalar::Util qw( refaddr );
 use List::MoreUtils ();
 use List::Util ();
+use VDOM::Util;
 
 use Class::XSAccessor
     accessors => {
@@ -79,6 +80,9 @@ sub new {
             %$self = %$parent;
             delete $self->{id};
             delete $self->{className};
+            delete $self->{href};
+            delete $self->{title};
+            delete $self->{src};
             $self->parentNode($parent);
             $self->{_child_ind} = shift;
             if (@_) {
@@ -562,6 +566,42 @@ sub getNodeByXpath {
     }
 
     return $node;
+}
+
+sub asVdom {
+    my $self = shift;
+    my $vdom;
+    if ($self->nodeType == $VDOM::Node::TEXT_NODE) {
+        if (!$self->childNodes && defined $self->{pos} && defined $self->{len}) {
+            $vdom = qq["" pos=$self->{pos} len=$self->{len} x=$self->{x} y=$self->{y} w=$self->{w} h=$self->{h}\n];
+        } else {
+            $vdom = $VDOM::Util::JsonXs->encode($self->nodeValue) .
+                qq[ x=$self->{x} y=$self->{y} w=$self->{w} h=$self->{h} {\n];
+            for my $child ($self->childNodes) {
+                $vdom .= $child->asVdom;
+            }
+            $vdom .= "}\n";
+        }
+    } else {
+        $vdom = $self->tagName;
+        while (my ($key, $val) = each %$self) {
+            next if $key =~ /^_|^tagName$/ or ref $val;
+            if ($val =~ /^\d+$/) {
+                $vdom .= " $key=$val";
+            } else {
+                $vdom .= " $key=" . $VDOM::Util::JsonXs->encode($val);
+            }
+        }
+        $vdom .= " {\n";
+        for my $child ($self->childNodes) {
+            $vdom .= $child->asVdom;
+        }
+        $vdom .= "}\n";
+    }
+    $vdom;
+}
+
+sub fromVdom {
 }
 
 1;
