@@ -601,7 +601,4 @@ sub asVdom {
     $vdom;
 }
 
-sub fromVdom {
-}
-
 1;
