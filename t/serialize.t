@@ -85,5 +85,10 @@ is $t2->asVdom, <<'_EOC_', 'text node without text run ok';
 }
 _EOC_
 
+my $t3 = VDOM::Element->fromVdom($t2->asVdom);
+ok $t3, 'fromVdom returns something';
+ok ref $t3, 'fromVdom returns a ref';
+isa_ok $t3, 'VDOM::Element', 'fromVdom returns an element';
+
 }
 
