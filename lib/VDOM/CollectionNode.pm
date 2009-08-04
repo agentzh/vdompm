@@ -159,7 +159,19 @@ sub ownerWindow {
 
 sub textContent {
     my ($self) = @_;
-    return join '', map { $_->textContent } @{ $self->{_elems} };
+    my $result;
+    my $pre_x;
+    for my $elem (@{$self->{_elems}}) {
+        if (!defined $pre_x) {
+            $result = $elem->textContent;
+        } elsif ($elem->x == $pre_x) {
+            $result .= " " . $elem->textContent;
+        } else {
+            $result .= "\n" . $elem->textContent;
+        }
+        $pre_x = $elem->x;
+    }
+    return $result;
 }
 
 1;
