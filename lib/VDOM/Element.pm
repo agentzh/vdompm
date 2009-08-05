@@ -3,6 +3,7 @@ package VDOM::Element;
 use strict;
 use warnings;
 
+#use Smart::Comments::JSON '##vdom';
 use VDOM::Util qw( safe_json_decode );
 use Scalar::Util qw( weaken );
 use base 'VDOM::Node';
@@ -96,7 +97,16 @@ sub fromVdom {
         open $in, '<', \$src;
     }
     my @parent = defined $parents ? @$parents : ();
-    my @children = defined $children ? @$children : ([]);
+    my @children = defined $children ? @$children : ();
+    if (!defined $parents) {
+        @parent   = (VDOM::Element->new);
+        @children = ([]);
+        #$parent[0]->{_childNodes} = $children[0];
+    }
+    if (!@children) {
+        @children = ([]);
+    }
+    my $root = $parent[0];
     while (<$in>) {
         my $node;
         chomp;
@@ -104,9 +114,9 @@ sub fromVdom {
         next if $_ eq '';
         my $first = substr($_, 0, 1);
 
-        ### parsing: $_
+        ##vdom parsing: $_
         if ($first eq '"') {
-            ### Found text node...
+            ##vdom Found text node...
 
             if (/{\s*$/) {
                 my $child_index = @{ $children[0] };
@@ -121,10 +131,10 @@ sub fromVdom {
                     VDOM::Text->new($parent[0], $child_index, $win, $doc)
                         ->parse_line(\$_);
             }
-            ### @children
-            ### @parent
+            ###vdom @children
+            ###vdom @parent
         } elsif ($first eq '}') {
-            ### closing node...
+            ##vdom closing node...
             if (!@parent) {
                 die "Syntax error in VDOM: Line $.: Unexpected } found.\n";
             }
@@ -134,21 +144,29 @@ sub fromVdom {
             }
             shift @children;
             shift @parent;
-            ### @children
-            ### @parent
+            ###vdom @children
+            ###vdom @parent
         } else { # must be an element
-            ### found an element node...
+            ##vdom found an element node...
             my $child_index = @{ $children[0] };
             my $node = VDOM::Element->new($parent[0], $child_index, $win, $doc)
                     ->parse_line(\$_);
             push @{ $children[0] }, $node;
             unshift @parent, $node;
             unshift @children, [];
-            ### @children
-            ### @parent
+            ###vdom @children
+            ###vdom @parent
         }
     }
-
+    if (@parent) {
+        my $children = $children[0];
+        if (defined $parent[0]) {
+            $parent[0]->childNodes(@$children);
+        }
+        shift @children;
+        shift @parent;
+    }
+    return $root;
 }
 
 1;

@@ -63,6 +63,7 @@ sub new {
     my $class = ref $_[0] ? ref shift : shift;
     #$self->{_childNodes} = [];
     my $self = bless {
+        _childNodes => [],
     }, $class;
     if (@_) {
         my $parent = shift;
@@ -83,6 +84,8 @@ sub new {
             delete $self->{href};
             delete $self->{title};
             delete $self->{src};
+            delete $self->{width};
+            delete $self->{height};
             $self->parentNode($parent);
             $self->{_child_ind} = shift;
             if (@_) {
@@ -578,6 +581,7 @@ sub asVdom {
             $vdom = $VDOM::Util::JsonXs->encode($self->nodeValue) .
                 qq[ x=$self->{x} y=$self->{y} w=$self->{w} h=$self->{h} {\n];
             for my $child ($self->childNodes) {
+                #warn "child: ", $child->nodeValue, "\n";
                 $vdom .= $child->asVdom;
             }
             $vdom .= "}\n";

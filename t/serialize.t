@@ -4,6 +4,7 @@ use warnings;
 use encoding 'utf8';
 use lib 'lib';
 
+#use Smart::Comments::JSON '##';
 #use Test::More tests => 172;
 use Test::More 'no_plan';
 
@@ -39,13 +40,13 @@ isa_ok $win, 'VDOM::Window', 'ref ok';
 $win->parse(\$src);
 my $p = $win->document->body->firstChild;
 is $p->asVdom, <<'_EOC_', 'vdom first child';
-DIV width=600 height=800 className="a b" id="foo-bar" {
-P width=600 height=800 className="c d" {
-P width=600 height=800 id="hello" {
+DIV className="a b" id="foo-bar" {
+P className="c d" {
+P id="hello" {
 }
 }
-P width=600 height=800 className="d" {
-A width=600 height=800 {
+P className="d" {
+A {
 }
 }
 }
@@ -89,6 +90,55 @@ my $t3 = VDOM::Element->fromVdom($t2->asVdom);
 ok $t3, 'fromVdom returns something';
 ok ref $t3, 'fromVdom returns a ref';
 isa_ok $t3, 'VDOM::Element', 'fromVdom returns an element';
+my $t4 = $t3->firstChild; # t4 should mimic $t2
+## t3: "$t3"
+## $t3->tagName
+## t4: "$t4"
+## $t4->nodeValue
+## t4 children: scalar($t4->childNodes)
+## t4 first child: $t4->firstChild
+is $t4->asVdom, <<'_EOC_', "t4's vdom has not changed";
+"Hello, world!" x=0 y=0 w=200 h=300 {
+}
+_EOC_
 
+$t3 = VDOM::Element->fromVdom($win->document->body->asVdom);
+ok $t3, 'fromVdom returns something';
+ok ref $t3, 'fromVdom returns a ref';
+isa_ok $t3, 'VDOM::Element', 'fromVdom returns an element';
+$t4 = $t3->firstChild; # t4 should mimic $t2
+## t3: "$t3"
+## $t3->tagName
+## t4: "$t4"
+## $t4->nodeValue
+## t4 children: scalar($t4->childNodes)
+## t4 first child: $t4->firstChild
+is $t4->asVdom, <<'_EOC_', "t4's vdom has not changed";
+BODY w=200 x=0 y=0 h=300 id="mybody" {
+"\n\n\n >> " x=260 y=33 w=28 h=14 {
+"" pos=0 len=1 x=260 y=33 w=7 h=14
+"" pos=4 len=3 x=267 y=33 w=21 h=14
+}
+"Hello, world!" x=0 y=0 w=200 h=300 {
+}
+}
+_EOC_
+
+=begin cmt
+
+window location="http://www.yahoo.com/\"" innerHeight=27 {
+document width=600 height=800 title="Human & Machine" {
+BODY id="mybody" x=0 y=0 w=200 h=300 {
+    "\n\n\n >> " x=260 y=33 w=28 h=14 {
+    "" pos=0 len=1 w=7
+    "" pos=4 len=3 x=267 w=21
+    }
+    "Hello, world!"
+}
+}
+}
+
+=end cmt
+=cut
 }
 
