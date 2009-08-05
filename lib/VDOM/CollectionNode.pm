@@ -157,6 +157,8 @@ sub ownerWindow {
     return $first ? $first->ownerWindow : undef;
 }
 
+=begin cmt
+
 sub textContent {
     my ($self) = @_;
     my $result;
@@ -172,6 +174,13 @@ sub textContent {
         $pre_x = $elem->x;
     }
     return $result;
+}
+
+=end cmt
+=cut
+
+sub textContent {
+    return join '', map { $_->textContent } $_[0]->elems;
 }
 
 1;
