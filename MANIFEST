@@ -1,3 +1,11 @@
+bin/mark-text-nodes.pl
+bin/mark-text-runs.pl
+bin/parse-vdom.pl
+bin/test.bat
+bin/vdom2html
+Changes
+demo/release-lh.sh
+demo/release-tth.sh
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -10,13 +18,23 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/VDOM.pm
+lib/VDOM/CollectionNode.pm
+lib/VDOM/Color.pm
 lib/VDOM/Document.pm
 lib/VDOM/Element.pm
+lib/VDOM/Html.pm
 lib/VDOM/Node.pm
 lib/VDOM/Text.pm
+lib/VDOM/Util.pm
 lib/VDOM/Window.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+README
+t/99-pod-coverage.t
+t/99-pod.t
 t/sanity.t
+t/selector.t
+t/serialize.t
+t/xpath.t

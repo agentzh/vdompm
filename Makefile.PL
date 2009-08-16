@@ -11,6 +11,7 @@ all_from            ('lib/VDOM.pm');
 requires            ('Scalar::Util');
 requires            ('JSON::XS');
 requires            ('Class::XSAccessor');
+requires            ('List::MoreUtils');
 build_requires      ('Test::More');
 no_index( directory => qw< t inc doc share demo > );
 
