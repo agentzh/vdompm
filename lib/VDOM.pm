@@ -63,6 +63,11 @@ VDOM - Visual DOM client library for Perl
         }
     }
 
+=head1 DESCRIPTION
+
+This Perl module provides a parser for the Visual DOM (VDOM) listing dumped by vdomkit or VdomBrowser.
+Also, a full-fledged (but not very complete) DOM library is provided atop that.
+
 =head1 AUTHOR
 
 agentzh (章亦春) C<< <agentzh@yahoo.cn> >>
@@ -71,5 +76,21 @@ agentzh (章亦春) C<< <agentzh@yahoo.cn> >>
 
 Copyright (C) 2009 by Yahoo! China EEEE Works, Alibaba Inc.
 
+=head1 SEE ALSO
 
+=over
+
+=item *
+
+The vdomkit project
+
+L<http://github.com/agentzh/vdomkit>
+
+=item *
+
+The VdomBrowser project
+
+L<http://github.com/agentzh/vdombrowser>
+
+=back
 
