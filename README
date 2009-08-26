@@ -42,9 +42,23 @@ SYNOPSIS
             }
         }
 
+DESCRIPTION
+    This Perl module provides a parser for the Visual DOM (VDOM) listing
+    dumped by vdomkit or VdomBrowser. Also, a full-fledged (but not very
+    complete) DOM library is provided atop that.
+
 AUTHOR
     agentzh (章亦春) "<agentzh@yahoo.cn>"
 
 COPYRIGHT & LICENSE
     Copyright (C) 2009 by Yahoo! China EEEE Works, Alibaba Inc.
+
+SEE ALSO
+    *   The vdomkit project
+
+        <http://github.com/agentzh/vdomkit>
+
+    *   The VdomBrowser project
+
+        <http://github.com/agentzh/vdombrowser>
 
