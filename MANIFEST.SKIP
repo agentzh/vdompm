@@ -9,3 +9,5 @@ pm_to_blib
 \.bak$
 /tmp/
 install\.bat$
+\.git\b
+\.gitignore

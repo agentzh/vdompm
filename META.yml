@@ -16,7 +16,6 @@ meta-spec:
 name: VDOM
 no_index:
   directory:
-    - demo
     - inc
     - t
 requires:

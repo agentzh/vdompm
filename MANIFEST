@@ -4,8 +4,6 @@ bin/parse-vdom.pl
 bin/test.bat
 bin/vdom2html
 Changes
-demo/release-lh.sh
-demo/release-tth.sh
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
