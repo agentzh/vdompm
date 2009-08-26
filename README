@@ -42,6 +42,7 @@ SYNOPSIS
             for my $child ($node->childNodes) {
                 push @res, get_all_text_nodes($child);
             }
+            return @res;
         }
 
 DESCRIPTION
