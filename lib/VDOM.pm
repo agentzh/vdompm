@@ -63,6 +63,7 @@ VDOM - Visual DOM client library for Perl
         for my $child ($node->childNodes) {
             push @res, get_all_text_nodes($child);
         }
+        return @res;
     }
 
 =head1 DESCRIPTION
