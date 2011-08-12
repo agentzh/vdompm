@@ -91,6 +91,10 @@ sub gen_html_attrs ($$) {
     if (defined $elem->alt) {
         push @attrs, qq{alt="} . escape_txt($elem->alt) . qq{"};
     }
+    if (defined $elem->value) {
+        push @attrs, qq{value="} . escape_txt($elem->value) . qq{"};
+    }
+
     my $parent = $elem->parentNode;
     my ($left, $top);
     if (defined $parent->x) {

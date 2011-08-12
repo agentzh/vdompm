@@ -318,6 +318,26 @@ sub childNodes {
     }
 }
 
+sub rx {
+    my ($self, $base_node) = @_;
+
+    if (!$base_node) {
+        return $self->x;
+    }
+
+    return $self->x - $base_node->x;
+}
+
+sub ry {
+    my ($self, $base_node) = @_;
+
+    if (!$base_node) {
+        return $self->y;
+    }
+
+    return $self->y - $base_node->y;
+}
+
 sub inflated {
     my $self = shift;
     my $parent = $self;
@@ -428,7 +448,8 @@ sub selector {
         my $class_name = $self->className;
         ##sel $id $tag $class_name
         if (defined $class_name) {
-            my @class_names = grep { /^[-A-Za-z_]+$/ }
+            #my @class_names = grep { /^[-A-Za-z_]+$/ }
+            my @class_names = grep { /^[-\w]+$/ }
                 split /\s+/, $class_name;
             $class_name = shift @class_names;
         }

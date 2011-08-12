@@ -10,7 +10,7 @@ use VDOM::Text;
 use VDOM::CollectionNode;
 use VDOM::Color;
 
-our $VERSION = '0.010';
+our $VERSION = '0.012';
 
 1;
 __END__

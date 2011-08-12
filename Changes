@@ -1,3 +1,9 @@
-verison 0.010
+version 0.010
 - initial release
+
+version 0.011
+- added value attribute for input tag
+
+version 0.012
+- added rx ry method for VDOM::Node
 

@@ -17,6 +17,8 @@ use Class::XSAccessor
         title => 'title',
         alt => 'alt',
         src => 'src',
+        value => 'value',
+        __seq => '__seq'
     };
 
 #__PACKAGE__->mk_accessors(qw{
